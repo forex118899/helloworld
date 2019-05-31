@@ -9,11 +9,14 @@ import json
 lock = threading.Lock()
 
 def checkServer(ip):
-    output = subprocess.check_output(["ssh", "root@" + ip, "/bin/bash", "/root/tr"])
-    lock.acquire()
-    print('-'*10, ip, '-' * 10)
-    print(output.decode('ascii'))
-    lock.release()
+    try:
+        output = subprocess.check_output(["ssh", "root@" + ip, "/bin/bash", "/root/tr"])
+        lock.acquire()
+        print('-'*10, ip, '-' * 10)
+        print(output.decode('ascii'))
+        lock.release()
+    except:
+        print('error:', ip)
 
 if __name__ == '__main__':  
     config = json.loads(open("config.json", "r").read())
