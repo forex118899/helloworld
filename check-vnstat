@@ -9,10 +9,13 @@ import json
 lock = threading.Lock()
 
 def checkServer(ip):
-    output = subprocess.check_output(["ssh", "root@" + ip, "vnstat"])
+    vnstat = subprocess.check_output(["ssh", "root@" + ip, "vnstat"])
+    uptime = subprocess.check_output(["ssh", "root@" + ip, "uptime"])
     lock.acquire()
     print('-'*10, ip, '-' * 10)
-    print(output.decode('ascii'))
+    print()
+    print(uptime.decode('ascii'))
+    print(vnstat.decode('ascii'))
     lock.release()
 
 if __name__ == '__main__':  
