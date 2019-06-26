@@ -3,15 +3,35 @@
 curl -I https://github.com/jjqqkk/chromium | head -n5
 sleep 2
 
+printf "\n######################\n"
+printf "config server\n"
+printf "######################\n"
+
+CONFIG="do2"
+
 printf "\n# listing logs...\n"
-ssh root@do2 "ls -l /var/log/nginx"
+ssh root@$CONFIG "ls -l /var/log/nginx"
 
 printf "\n# count of out.txt in access.log...\n"
-ssh root@do2 "grep out.txt /var/log/nginx/access.log | wc"
-ssh root@do2 "grep out.txt /var/log/nginx/access.log.1 | wc"
+ssh root@$CONFIG "grep out.txt /var/log/nginx/access.log | wc"
+ssh root@$CONFIG "grep out.txt /var/log/nginx/access.log.1 | wc"
 
 printf "\n# Removing .gz\n"
-ssh root@do2 "rm /var/log/nginx/*.gz"
+ssh root@$CONFIG "rm /var/log/nginx/*.gz"
 
 printf "\n# vnstat...\n"
-ssh root@do2 vnstat
+ssh root@$CONFIG vnstat
+
+DL="do3"
+
+printf "\n######################\n"
+printf "Chrome download server\n"
+printf "######################\n"
+
+printf "\n# listing logs on the Chrome download server...\n"
+ssh root@$DL "ls -l /var/log/nginx"
+
+printf "\n# vnstat\n"
+ssh root@$DL "vnstat"
+
+ssh root@$DL "vnstat -h"
