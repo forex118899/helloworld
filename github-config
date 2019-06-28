@@ -30,6 +30,7 @@ printf "######################\n"
 
 printf "\n# listing logs on the Chrome download server...\n"
 ssh root@$DL "ls -l /var/log/nginx"
+ssh root@$DL "rm /var/log/nginx/*.gz"
 
 printf "\n# vnstat\n"
 ssh root@$DL "vnstat"
