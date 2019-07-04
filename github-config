@@ -1,11 +1,14 @@
 #!/bin/bash
 
+printf "github Chromium..."
 curl -I https://github.com/jjqqkk/chromium | head -n5
 sleep 2
 
 printf "\n######################\n"
 printf "config server\n"
 printf "######################\n"
+
+curl -I https://raw.githubusercontent.com/forex118899/helloworld/master/out.txt | head 
 
 CONFIG="do2"
 
@@ -21,18 +24,3 @@ ssh root@$CONFIG "rm /var/log/nginx/*.gz"
 
 printf "\n# vnstat...\n"
 ssh root@$CONFIG vnstat
-
-DL="do3"
-
-printf "\n######################\n"
-printf "Chrome download server\n"
-printf "######################\n"
-
-printf "\n# listing logs on the Chrome download server...\n"
-ssh root@$DL "ls -l /var/log/nginx"
-ssh root@$DL "rm /var/log/nginx/*.gz"
-
-printf "\n# vnstat\n"
-ssh root@$DL "vnstat"
-
-ssh root@$DL "vnstat -h"
