@@ -11,7 +11,7 @@ lock = threading.Lock()
 def checkServer(ip):
     ret = subprocess.call(["ssh", "root@" + ip, "touch", "/tmp/abc"])
     lock.acquire()
-    print(ip, ret)
+    print("%-17s%3d" % (ip, ret))
     lock.release()
 
 if __name__ == '__main__':  
