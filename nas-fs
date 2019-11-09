@@ -9,9 +9,10 @@ import json
 lock = threading.Lock()
 
 def checkServer(ip):
-    ret = subprocess.call(["ssh", "root@" + ip, "touch", "/tmp/abc"])
+    ret = subprocess.call(["ssh", "root@" + ip, "touch", "/tmp/abc", "&", "tc", "qdisc"])
     lock.acquire()
     print("%-17s%3d" % (ip, ret))
+    print("\n")
     lock.release()
 
 if __name__ == '__main__':  
