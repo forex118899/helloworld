@@ -1,0 +1,8 @@
+#!/bin/bash
+
+../helper config-write config.json > out.txt
+
+scp out.txt root@do2:/var/www/html
+git add out.txt
+git commit -m "Update config"
+git push
