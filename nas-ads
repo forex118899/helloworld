@@ -10,7 +10,7 @@ from pathlib import Path
 
 def openBrowser(chromium, ip):
     cmd = "%s --incognito " \
-        "--proxy-server=https://cppcoding.site " \
+        "--proxy-server=https://cppcoding.site:8443 " \
         "--host-resolver-rules='MAP cppcoding.site %s' https://www.freevpn.pw" % (chromium, 
         ip)
     print(ip)
