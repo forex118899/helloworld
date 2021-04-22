@@ -8,11 +8,11 @@ import json
 
 lock = threading.Lock()
 
-def checkServer(ip):
+def checkServer(ip, tag):
     try:
         output = subprocess.check_output(["ssh", "root@" + ip, "/bin/bash", "/root/tr"])
         lock.acquire()
-        print('-'*10, ip, '-' * 10)
+        print('-'*10, tag, ip, '-' * 10)
         print(output.decode('ascii'))
         lock.release()
     except:
@@ -21,5 +21,9 @@ def checkServer(ip):
 if __name__ == '__main__':  
     config = json.loads(open("config.json", "r").read())
     for host in config["servers"]["free"]:
-        t = threading.Thread(target=checkServer, args=(host,))
+        t = threading.Thread(target=checkServer, args=(host, 'free', ))
         t.start()
+    for items in config["servers"]["vip2"].items():
+        for host in items[1]:
+            t = threading.Thread(target=checkServer, args=(host, items[0], ))
+            t.start()
