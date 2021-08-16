@@ -8,3 +8,5 @@ scp out*.txt root@do2:/var/www/html
 
 git commit -am "Update config"
 git push
+
+# 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
