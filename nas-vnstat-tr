@@ -8,22 +8,50 @@ import json
 
 lock = threading.Lock()
 
-def checkServer(ip, tag):
-    try:
-        output = subprocess.check_output(["ssh", "root@" + ip, "/bin/bash", "/root/tr"])
-        lock.acquire()
-        print('-'*10, tag, ip, '-' * 10)
-        print(output.decode('ascii'))
-        lock.release()
-    except:
-        print('error:', ip)
 
-if __name__ == '__main__':  
+class CheckResult(object):
+    def __init__(self, ip, country) -> None:
+        super().__init__()
+        self.ip = ip
+        self.country = country
+        self.result = ""
+
+    def __str__(self) -> str:
+        ret = "\n\n%s\n%s\n-----\n" % (self.country, self.ip)
+        ret += self.result
+        return ret
+
+    def check(self, maxtry=3):
+        if maxtry == 0:
+            self.result = "Timeout"
+            return
+        try:
+            output = subprocess.check_output(
+                ["ssh", "-o", "ConnectTimeout=15", "StrictHostKeyChecking=no", "root@" + self.ip, "/bin/bash", "/root/tr"])
+            self.result = output.decode('ascii')
+        except:
+            self.check(maxtry-1)
+
+
+if __name__ == '__main__':
     config = json.loads(open("config.json", "r").read())
-    for host in config["servers"]["free"]:
-        t = threading.Thread(target=checkServer, args=(host, 'free', ))
+    servers = config["servers"]["vip2"]
+    # print(servers)
+    hostList = []
+    for item in servers.items():
+        country = item[0]
+        serverList = item[1]
+        for server in serverList:
+            hostList.append(CheckResult(ip=server, country=country))
+
+    threads = []
+    for checker in hostList:
+        t = threading.Thread(target=CheckResult.check, args=(checker,))
         t.start()
-    for items in config["servers"]["vip2"].items():
-        for host in items[1]:
-            t = threading.Thread(target=checkServer, args=(host, items[0], ))
-            t.start()
+        threads.append(t)
+
+    for t in threads:
+        t.join()
+
+    for h in hostList:
+        print(h)
