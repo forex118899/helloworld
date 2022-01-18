@@ -26,8 +26,9 @@ class CheckResult(object):
             self.result = "Timeout"
             return
         try:
+            # "StrictHostKeyChecking=no"
             output = subprocess.check_output(
-                ["ssh", "-o", "ConnectTimeout=15", "StrictHostKeyChecking=no", "root@" + self.ip, "/bin/bash", "/root/tr"])
+                ["ssh", "-o", "ConnectTimeout=15", "root@" + self.ip, "/bin/bash", "/root/tr"])
             self.result = output.decode('ascii')
         except:
             self.check(maxtry-1)
