@@ -5,6 +5,7 @@ node read-config.js |  base64 | base64 | base64 > out2.txt
 
 scp out*.txt root@do2:/var/www/html
 #scp out2.txt root@do2:/var/www/html
+scp out*.txt root@161.35.168.208:/var/www/html/
 
 git commit -am "Update config"
 git push aaa master
